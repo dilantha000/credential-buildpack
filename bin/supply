@@ -20,6 +20,11 @@ pushd "${CACHE_DIR}"
   export PATH=$PWD/jdk-11.0.10+9/bin:$PATH
 popd
 
+pushd "${CACHE_DIR}"
+  curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v7&source=github" | tar -zx
+  tar xzf cf7-cli_7.3.0_linux_x86-64.tgz
+popd
+
 # pushd: save current dir to stack. Move to new dir.
 pushd "${DEPS_DIR}/${INDEX}"
 
