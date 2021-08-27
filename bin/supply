@@ -22,21 +22,31 @@ popd
 
 pushd "${CACHE_DIR}"
   curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v7&source=github" | tar -zx
-  tar xzf cf7-cli_7.3.0_linux_x86-64.tgz
+  export PATH=$PWD:$PATH
 popd
 
 # pushd: save current dir to stack. Move to new dir.
 pushd "${DEPS_DIR}/${INDEX}"
 
+# CF API cannot be targetted from inside a customer buildpack or application environment (AC has a network level block enabled).
+# CF create-service-key command is for cf marketplace services, which I am not sure if you are using or not..
+# Where will the S3 credentials come from? How will the S3 bucket be managed? Are you planning to create a marketplace service?
+
 # Environment variables for s3 Bucket - enables AWS CLI to add, download and modify files
-SERVICE_INSTANCE_NAME=my-creds-bucket
-KEY_NAME=karinz
-cf create-service-key "${SERVICE_INSTANCE_NAME}" "${KEY_NAME}"
-S3_CREDENTIALS=`cf service-key "${SERVICE_INSTANCE_NAME}" "${KEY_NAME}" | tail -n +2`
-export AWS_ACCESS_KEY_ID=`echo "${S3_CREDENTIALS}" | jq -r .access_key_id`
-export AWS_SECRET_ACCESS_KEY=`echo "${S3_CREDENTIALS}" | jq -r .secret_key_id`
-export BUCKET_NAME=`echo "${S3_CREDENTIALS}" | jq -r .bucket`
-export AWS_DEFAULT_REGIONS=`echo "${S3_CREDENTIALS}" | jq -r '.region'`
+#SERVICE_INSTANCE_NAME=my-creds-bucket
+#KEY_NAME=karinz
+#cf create-service-key "${SERVICE_INSTANCE_NAME}" "${KEY_NAME}"
+#S3_CREDENTIALS=`cf service-key "${SERVICE_INSTANCE_NAME}" "${KEY_NAME}" | tail -n +2`
+
+#export BUCKET_NAME=`echo "${S3_CREDENTIALS}" | jq -r .bucket`
+#export AWS_ACCESS_KEY_ID=`echo "${S3_CREDENTIALS}" | jq -r .access_key_id`
+#export AWS_SECRET_ACCESS_KEY=`echo "${S3_CREDENTIALS}" | jq -r .secret_key_id`
+#export AWS_DEFAULT_REGION=`echo "${S3_CREDENTIALS}" | jq -r '.region'`
+
+echo "${BUCKET_NAME}"
+echo "${AWS_ACCESS_KEY_ID}"
+echo "${AWS_SECRET_ACCESS_KEY}"
+echo "${AWS_DEFAULT_REGION}"
 
 # Download the keystore from your s3 bucket
 KEYSTORE=`aws s3 cp s3://${BUCKET_NAME}/keystore.pfx`
