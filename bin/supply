@@ -18,11 +18,10 @@ pushd "${CACHE_DIR}"
   curl -L -O https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/OpenJDK11U-jdk_x64_linux_hotspot_11.0.10_9.tar.gz
   tar xzf OpenJDK11U-jdk_x64_linux_hotspot_11.0.10_9.tar.gz
   export PATH=$PWD/jdk-11.0.10+9/bin:$PATH
-popd
 
-pushd "${CACHE_DIR}"
-  curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v7&source=github" | tar -zx
-  export PATH=$PWD:$PATH
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  unzip awscliv2.zip
+  sudo ./aws/install
 popd
 
 # pushd: save current dir to stack. Move to new dir.
