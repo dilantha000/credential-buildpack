@@ -28,6 +28,7 @@ popd
 # pushd: save current dir to stack. Move to new dir.
 pushd "${DEPS_DIR}/${INDEX}"
 
+echo $VCAP_SERVICES | jq -r '.["s3-credentials"][0].credentials.AWS_ACCESS_KEY' > s3.key
 # CF API cannot be targetted from inside a customer buildpack or application environment (AC has a network level block enabled).
 # CF create-service-key command is for cf marketplace services, which I am not sure if you are using or not..
 # Where will the S3 credentials come from? How will the S3 bucket be managed? Are you planning to create a marketplace service?
