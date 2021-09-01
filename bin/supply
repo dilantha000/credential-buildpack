@@ -27,24 +27,16 @@ popd
 
 # pushd: save current dir to stack. Move to new dir.
 pushd "${DEPS_DIR}/${INDEX}"
+  echo "AWS ENV VARIABLES:"
+  env | grep AWS
+  aws s3api list-objects --bucket ir-ac-test --query 'Contents[].{Key: Key, Size:Size}'
 
-echo $VCAP_SERVICES | jq -r '.["s3-credentials"][0].credentials.AWS_ACCESS_KEY' > s3.key
-# CF API cannot be targetted from inside a customer buildpack or application environment (AC has a network level block enabled).
-# CF create-service-key command is for cf marketplace services, which I am not sure if you are using or not..
-# Where will the S3 credentials come from? How will the S3 bucket be managed? Are you planning to create a marketplace service?
-
-# Environment variables for s3 Bucket - enables AWS CLI to add, download and modify files
-#SERVICE_INSTANCE_NAME=my-creds-bucket
-#KEY_NAME=karinz
-#cf create-service-key "${SERVICE_INSTANCE_NAME}" "${KEY_NAME}"
-#S3_CREDENTIALS=`cf service-key "${SERVICE_INSTANCE_NAME}" "${KEY_NAME}" | tail -n +2`
-
-#export BUCKET_NAME=`echo "${S3_CREDENTIALS}" | jq -r .bucket`
-#export AWS_ACCESS_KEY_ID=`echo "${S3_CREDENTIALS}" | jq -r .access_key_id`
-#export AWS_SECRET_ACCESS_KEY=`echo "${S3_CREDENTIALS}" | jq -r .secret_key_id`
-#export AWS_DEFAULT_REGION=`echo "${S3_CREDENTIALS}" | jq -r '.region'`
-aws s3api list-objects --bucket text-content --query 'Contents[].{Key: Key, Size:Size}'
-popd
+  #copy certs from S3
+  #mkdir -p .keystore/prod01-cert-details
+  #aws s3 cp s3://ir-ac-test/mytestfile.txt ./.keystore/prod01-cert-details
+  #ls -lart ${correct_location}/.keystore/prod01-cert-details
+  # aws s3 sync --exclude "*" --include "*.p12" --exact-timestamps s3://ir-ac-test/ ${correct_location}/.keystore/prod01-cert-details
+#popd
 
 # Create a .profile folder within the build directory
 mkdir -p "${BUILD_DIR}/.profile.d"
@@ -56,8 +48,5 @@ S3_CREDENTIALS_SCRIPT_PATH="${BUILD_DIR}/.profile.d/s3_credentials.sh"
 echo $S3_CREDENTIALS_SCRIPT_PATH
 
 echo $VCAP_SERVICES
-# Use VCAP_SERVICES to obtain the required certificate to run the test harness
-
-# Test we can retrieve a VCAP_SERVICE env variable
 echo "Print bucket_name"
 echo $VCAP_SERVICES | jq -r '.["user-provided"][0].credentials.bucket_name'
