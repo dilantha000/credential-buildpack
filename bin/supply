@@ -27,6 +27,8 @@ popd
 
 # pushd: save current dir to stack. Move to new dir.
 pushd "${DEPS_DIR}/${INDEX}"
+  echo $VCAP_SERVICES | jq -r '.["s3-credentials"][0].AWS_ACCESS_KEY_ID' > test.txt
+  #echo $VCAP_SERVICES | jq -r '.["s3-credentials"][0].AWS_ACCESS_KEY_ID' >> test.txt
   aws configure list
   echo "AWS ENV VARIABLES:"
   env | grep AWS
