@@ -25,18 +25,3 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
   ls -la
   export PATH=/tmp/bin:$PATH
 popd
-
-pushd "${DEPS_DIR}/${INDEX}"
-  aws configure list
-  echo "AWS ENV VARIABLES:"
-  env | grep AWS
-  aws s3api list-objects --bucket ir-ac-test --query 'Contents[].{Key: Key, Size:Size}'
-popd
-# pushd: save current dir to stack. Move to new dir.
-
-
-  #copy certs from S3
-  #mkdir -p .keystore/prod01-cert-details
-  #aws s3 cp s3://ir-ac-test/mytestfile.txt ./.keystore/prod01-cert-details
-  #ls -lart /.keystore/prod01-cert-details
-  # aws s3 sync --exclude "*" --include "*.p12" --exact-timestamps s3://ir-ac-test/ ${correct_location}/.keystore/prod01-cert-details
