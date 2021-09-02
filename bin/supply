@@ -26,12 +26,7 @@ pushd "${CACHE_DIR}"
 popd
 
 # pushd: save current dir to stack. Move to new dir.
-pushd "${DEPS_DIR}/${INDEX}"
-  #echo $VCAP_SERVICES | jq -r '.["s3-credentials"][0].AWS_ACCESS_KEY_ID' >> test.txt
-  aws configure list
-  echo "AWS ENV VARIABLES:"
-  env | grep AWS
-  aws s3api list-objects --bucket ir-ac-test --query 'Contents[].{Key: Key, Size:Size}'
+
 
   #copy certs from S3
   #mkdir -p .keystore/prod01-cert-details
@@ -39,16 +34,3 @@ pushd "${DEPS_DIR}/${INDEX}"
   #ls -lart /.keystore/prod01-cert-details
   # aws s3 sync --exclude "*" --include "*.p12" --exact-timestamps s3://ir-ac-test/ ${correct_location}/.keystore/prod01-cert-details
 #popd
-
-# Create a .profile folder within the build directory
-mkdir -p "${BUILD_DIR}/.profile.d"
-# Create a param to reference build .profile + script
-# s3_credentials.sh will be run when the app starts. Can be named whatever you want.
-S3_CREDENTIALS_SCRIPT_PATH="${BUILD_DIR}/.profile.d/s3_credentials.sh"
-# Make CUSTOM_KEYSTORE available as env variable when the script is run.
-#echo "export CUSTOM_KEYSTORE=/deps/${INDEX}/${KEYSTORE}" > "${S3_CREDENTIALS_SCRIPT_PATH}"
-echo $S3_CREDENTIALS_SCRIPT_PATH
-
-echo $VCAP_SERVICES
-echo "Print bucket_name"
-echo $VCAP_SERVICES | jq -r '.["user-provided"][0].credentials.bucket_name'
