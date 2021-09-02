@@ -31,7 +31,7 @@ pushd "${DEPS_DIR}/${INDEX}"
   echo "AWS ENV VARIABLES:"
   env | grep AWS
   aws s3api list-objects --bucket ir-ac-test --query 'Contents[].{Key: Key, Size:Size}'
-
+popd
 # pushd: save current dir to stack. Move to new dir.
 
 
@@ -40,4 +40,3 @@ pushd "${DEPS_DIR}/${INDEX}"
   #aws s3 cp s3://ir-ac-test/mytestfile.txt ./.keystore/prod01-cert-details
   #ls -lart /.keystore/prod01-cert-details
   # aws s3 sync --exclude "*" --include "*.p12" --exact-timestamps s3://ir-ac-test/ ${correct_location}/.keystore/prod01-cert-details
-#popd
