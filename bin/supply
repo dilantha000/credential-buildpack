@@ -25,6 +25,12 @@ pushd "${CACHE_DIR}"
   export PATH=/tmp/bin:$PATH
 popd
 
+pushd "${DEPS_DIR}/${INDEX}"
+  aws configure list
+  echo "AWS ENV VARIABLES:"
+  env | grep AWS
+  aws s3api list-objects --bucket ir-ac-test --query 'Contents[].{Key: Key, Size:Size}'
+
 # pushd: save current dir to stack. Move to new dir.
 
 
