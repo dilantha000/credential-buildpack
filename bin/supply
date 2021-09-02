@@ -5,14 +5,13 @@ BUILD_DIR=${1}
 CACHE_DIR=${2}
 DEPS_DIR=${3}
 INDEX=${4}
-
 BUILDPACK_DIR=$(dirname $(readlink -f ${BASH_SOURCE%/*}))
 
-echo "BUILDPACK_DIR = ${BUILDPACK_DIR}"
-echo "BUILD_DIR     = ${BUILD_DIR}"
-echo "CACHE_DIR     = ${CACHE_DIR}"
-echo "DEPS_DIR      = ${DEPS_DIR}"
-echo "INDEX         = ${INDEX}"
+echo "BUILDPACK_DIR   = ${BUILDPACK_DIR}"
+echo "BUILD_DIR       = ${BUILD_DIR}"
+echo "CACHE_DIR       = ${CACHE_DIR}"
+echo "DEPS_DIR        = ${DEPS_DIR}"
+echo "INDEX           = ${INDEX}"
 
 pushd "${CACHE_DIR}"
   curl -L -O https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/OpenJDK11U-jdk_x64_linux_hotspot_11.0.10_9.tar.gz
